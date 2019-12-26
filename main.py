@@ -1,9 +1,9 @@
+from geo_classes import *
 import sys
 
 
 def main():
     # Task1: User Input
-    print("Please input your current location: ")
     tuple_user = (sys.argv[1], sys.argv[2])
     # Error handling
     try:
@@ -18,7 +18,16 @@ def main():
                 break
             except ValueError:
                 print("The coordinate should be number, please input again: ")
+    point_user = Point("user", x, y)
 
+    # Test whether the user is within the box
+    min_x = 430000
+    max_x = 465000
+    min_y = 80000
+    max_y = 95000
+    if point_user.get_x() > max_x or point_user.get_x() < min_x or point_user.get_y() > max_y or point_user.get_y() < min_y:
+        print("The user is outside this box. ")
+        sys.exit()
 
     # Task2: Highest Point Identification
 
