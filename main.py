@@ -1,4 +1,4 @@
-from geo_classes import *
+from shapely.geometry import *
 import sys
 
 
@@ -18,14 +18,14 @@ def main():
                 break
             except ValueError:
                 print("The coordinate should be number, please input again: ")
-    point_user = Point("user", x, y)
+    point_user = Point(x, y)
 
     # Test whether the user is within the box
     min_x = 430000
     max_x = 465000
     min_y = 80000
     max_y = 95000
-    if point_user.get_x() > max_x or point_user.get_x() < min_x or point_user.get_y() > max_y or point_user.get_y() < min_y:
+    if point_user.x > max_x or point_user.x < min_x or point_user.y > max_y or point_user.y < min_y:
         print("The user is outside this box. ")
         sys.exit()
 
