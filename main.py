@@ -1,4 +1,5 @@
 from shapely.geometry import *
+import rasterio
 import sys
 
 
@@ -30,6 +31,9 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
+    filepath = 'F:/PycharmProjects/Group-A/Material/elevation/SZ.asc'
+    # filepath = sys.argv[3]
+    ele = rasterio.open(filepath)
 
     # Task 3: Nearest Integrated Transport Network
 
