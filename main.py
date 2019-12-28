@@ -1,11 +1,16 @@
+import math
 from shapely.geometry import *
+from pyproj import *
 import rasterio
+from rasterio.windows import Window
 import sys
+from highest_pt import *
 
 
 def main():
     # Task1: User Input
-    tuple_user = (sys.argv[1], sys.argv[2])
+    tuple_user = (439619, 85800)
+    # tuple_user = (sys.argv[1], sys.argv[2])
     # Error handling
     try:
         x = float(tuple_user[0])
@@ -31,9 +36,22 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
-    filepath = 'F:/PycharmProjects/Group-A/Material/elevation/SZ.asc'
-    # filepath = sys.argv[3]
-    ele = rasterio.open(filepath)
+    ele_fp = 'F:/PycharmProjects/Group-A/Material/elevation/SZ.asc'
+    # ele_fp = sys.argv[3]
+    elevation = rasterio.open(ele_fp)
+    point_high = highest_pt(point_user, elevation)
+    max_ele, hpt_x, hpt_y = point_high.get_highest_pt()
+    print(max_ele)
+    print(hpt_x)
+    print(hpt_y)
+
+
+    # pt_highest = highest_pt(point_user, elevation)
+    # max_ele = pt_highest.get_highest_pt()
+    # print(max_ele)
+
+
+
 
     # Task 3: Nearest Integrated Transport Network
 
