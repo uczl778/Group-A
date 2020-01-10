@@ -36,7 +36,7 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
-    ele_fp = 'F:/PycharmProjects/Group-A/Material/elevation/SZ.asc'
+    ele_fp = 'E:/Pycharm/ass2/Material/elevation/SZ.asc'
     # ele_fp = sys.argv[3]
     elevation = rasterio.open(ele_fp)
     point_high = highest_pt(point_user, elevation)

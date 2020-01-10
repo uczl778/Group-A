@@ -1,24 +1,30 @@
-from rtree import *
+from rtree import index
 import networkx as nx
 import json
 
-idx = index.Index()
-br = (430000, 80000, 465000, 95000)
-idx.insert(0, br)
-for i in range(1000):
-    for j in range(1000):
-        idx.insert(i * 1000 + j, (i, j, i + 10, j + 10))
-for i in idx.intersection((1.0, 1.0, 2.0, 2.0)):
-    print(i)
-for i in idx.nearest((0.8, 0.8), 1):
-    print(i)
-
-g = nx.Graph()
 solent_itn_json = "E:/pycharm/ass2/Material/itn/solent_itn.json"
-with open(solent_itn_json, "r") as f:
-    solent_itn = json.load(f)
+with open('solent_itn.json', "r") as load_f:
+    solent_itn = json.load(load_f)
 
-g = nx.Graph()
-road_links = solent_itn['roadlinks']
-for link in road_links:
-    g.add_edge(road_links[link]['start'], road_links[link]['end'], fid=link, weight=road_links[link]['length'])
+road_nodes = solent_itn['roadnodes']
+
+idx = index.Index()
+index = 0
+# create a list for node id
+noad_append_id = []
+for coords in road_nodes:
+    node_coords = road_nodes[coords]['coords']
+    road_id = coords
+    noad_append_id.append(node_coords)
+print(noad_append_id)
+
+for node in noad_append_id:
+     idx.insert(index, (node[0], node[1], node[0], node[1]))
+     index = index + 1
+# Let the user enter x,y coordinates
+x = 442798
+y = 75320
+# find out the nearest node from user
+for i in idx.nearest((x, y), 1):
+       print(i)
+
