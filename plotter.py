@@ -2,23 +2,25 @@ from collections import OrderedDict
 
 import matplotlib
 import matplotlib.pyplot as plt
+import rasterio
 from rasterio import plot
 import numpy as np
 import cartopy.crs as ccrs
 from shapely.geometry import *
 from rasterio.mask import mask
+from rasterio.windows import Window
+from rasterio.plot import *
 
 matplotlib.use('TkAgg')
 
 
 class Plotter:
 
-    def __init__(self, pt_user, pt_highest, back_image,back_transform):
+    def __init__(self, pt_user, pt_highest, background):
         self.__pt_user = pt_user
         self.__pt_highest = pt_highest
         # self.__route = route
-        self.__back_image = back_image
-        self.__back_transform = back_transform
+        self.__background = background
 
     def get_pt_user(self):
         return self.__pt_user
@@ -29,34 +31,42 @@ class Plotter:
     # def get_route(self):
     #     return self.__route
 
-    def get_back_image(self):
-        return self.__back_image
-
-    def get_back_transform(self):
-        return self.__back_transform
+    def get_background(self):
+        return self.__background
 
     def plotting(self):
         pt_user = self.get_pt_user()
         pt_highest = self.get_pt_highest()
         # route = self.get_route()
-        back_image = self.get_back_image()
-        back_transform = self.get_back_transform()
+        background = self.get_background()
 
-        # fig = plt.figure(dpi=300)
         plt.figure()
 
         # Plot the background
-        # ax = fig.add_subplot(1,1,1, back_transform)
-        
-        plt.imshow(back_image)
-        # palette = np.array([value for key, value in background.colormap(1).items()])
-        # background_image = palette[buffered_array]
-        # bounds = background_image.bounds
-        # extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
-        # display_extent = [bounds.left + 200, bounds.right - 200, bounds.bottom + 600, bounds.top - 600]
-        #
+        # row_ptu, col_ptu = background.index(pt_user.x, pt_user.y)
+        # rows = row_ptu - 2000
+        # cols = col_ptu - 2000
+        # win = Window(cols, rows, 4000, 4000)
+        # win_transform = background.window_transform(win)
+        # w = background.read(1, window=win)
+        # r_c_list = range(0, w.shape[1])
+        # xs, ys = rasterio.transform.xy(win_transform, r_c_list, r_c_list)
+        # show(w, transform=background.transform)
 
-        # ax.imshow(background_image, origin="upper", extent=extent, zorder=0)
+        background_array = background.read(1)
+        palette = np.array([value for key, value in background.colormap(1).items()])
+        background_image = palette[background_array]
+
+        bounds = background_image.bounds
+        extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
+
+        fig = plt.figure(figsize=(3, 3), dpi=300)
+        ax = fig.add_subplot(1,1,1)
+
+        # display_extent = [bounds.left + 200, bounds.right - 200, bounds.bottom + 600, bounds.top - 600]
+
+        ax.imshow(background_image, origin="upper", extent=extent, zorder=0)
+
         # ax.set_extent(display_extent, crs=ccrs.OSGB())
 
         # Plot the starting point and the highest point

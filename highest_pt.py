@@ -24,8 +24,9 @@ class highest_pt:
         dataset, win_transform = mask(elevation, [buffered_zone], crop=True, nodata=np.nan)
 
         # Identify the highest point
+        buffer_ele = dataset[0]
         max_ele = np.nanmax(dataset[0])
         re = np.where(dataset[0] == max_ele)
         re_x, re_y = win_transform * (re[1][0], re[0][0])  # Collect the first highest point
 
-        return Point(re_x, re_y), max_ele
+        return Point(re_x, re_y), max_ele, buffer_ele
