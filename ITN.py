@@ -17,7 +17,7 @@ def  itn(x, y):
         road_id = coords
 
         node_append_id.append(node_coords)
-    print(node_append_id)
+
 
     for node in node_append_id:
          idx.insert(index, (node[0], node[1], node[0], node[1]))

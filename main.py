@@ -6,7 +6,9 @@ from highest_pt import *
 from plotter import *
 import geopandas as gpd
 from rasterio.mask import mask
+from ITN import *
 
+import cartopy
 
 def main():
     # Task1: User Input
@@ -37,7 +39,7 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
-    ele_fp = 'F:/PycharmProjects/Material/elevation/SZ.asc'
+    ele_fp = 'E:/pycharm/ass2/Material/elevation/SZ.asc'
     # ele_fp = sys.argv[3]
     elevation = rasterio.open(ele_fp)
     point_high = highest_pt(pt_user, elevation)
@@ -47,12 +49,17 @@ def main():
     print("The elevation of the highest point is: " + str(max_ele))
 
     # Task 3: Nearest Integrated Transport Network
-
+    itn(x, y)
+    pt_user = Point(439619, 85800)
+    a = highest_pt(pt_user, elevation)
+    h = a.get_highest_pt()[0]
+    print(h)
+    itn(h.x, h.y)
     # Task 4: Shortest Path
 
     # Task 5: Map Plotting
 
-    base_fp = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
+    base_fp = "E:/pycharm/ass2/Material/background/raster-50k_2724246.tif"
     background = rasterio.open(base_fp)
     buffered_zone = pt_user.buffer(10000)
     out_image, out_win_transform = mask(background, [buffered_zone], crop=True, nodata=background.nodata)
