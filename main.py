@@ -3,12 +3,13 @@ from pyproj import *
 import rasterio
 import sys
 from highest_pt import *
+from shortest_path import *
 from plotter import *
 import geopandas as gpd
 from rasterio.mask import mask
 from ITN import *
-
 import cartopy
+
 
 def main():
     # Task1: User Input
@@ -39,30 +40,44 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
+    # Read the elevation
     ele_fp = 'F:/PycharmProjects/Material/elevation/SZ.asc'
-    # ele_fp = sys.argv[3]
     elevation = rasterio.open(ele_fp)
-    point_high = highest_pt(pt_user, elevation)
-    pt_highest, max_ele, buffer_ele = point_high.get_highest_pt()
+    # Create an object of the highest point
+    point_highest = highest_pt(pt_user, elevation)
+    pt_highest, max_ele, buffer_ele = point_highest.get_highest_pt()
 
     print("The coordinate of the highest point is: " + str(pt_highest.x) + ", " + str(pt_highest.y))
     print("The elevation of the highest point is: " + str(max_ele))
 
     # Task 3: Nearest Integrated Transport Network
     node_user_id = itn(pt_user.x, pt_user.y)
-    print(node_user_id)
-    # pt_user = Point(439619, 85800)
-    # a = highest_pt(pt_user, elevation)
-    # h = a.get_highest_pt()[0]
-    # print(h)
+    # print(node_user_id)
     node_highest_id = itn(pt_highest.x, pt_highest.y)
-    print(node_highest_id)
+    # print(node_highest_id)
 
     # Task 4: Shortest Path
+    # Read the network
+    iow_itn_json = "F:/PycharmProjects/Material/itn/solent_itn.json"
+    with open(iow_itn_json, "r") as f:
+        iow_itn = json.load(f)
+    # Read the elevation info
+    dataset = elevation
+    # View the route, load the background map
+    mersea_background = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
+    background = rasterio.open(str(mersea_background))
+    # The start point and end point
+    start = node_user_id
+    end = node_highest_id
+    # Create an object of the shortest path
+    path_shortest = shortest_path(start, end, iow_itn, dataset)
+    g_map = path_shortest.g_map()
+    path = path_shortest.shorest_path(g_map)
+    path_shortest.visual_path(g_map, path, background)
 
     # Task 5: Map Plotting
 
-    base_fp = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
+    # base_fp = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
     # background = rasterio.open(base_fp)
     # buffered_zone = pt_user.buffer(10000)
     # out_image, out_win_transform = mask(background, [buffered_zone], crop=True, nodata=background.nodata)
