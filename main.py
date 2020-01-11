@@ -39,34 +39,38 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
-    ele_fp = 'E:/pycharm/ass2/Material/elevation/SZ.asc'
+    ele_fp = 'F:/PycharmProjects/Material/elevation/SZ.asc'
     # ele_fp = sys.argv[3]
     elevation = rasterio.open(ele_fp)
     point_high = highest_pt(pt_user, elevation)
-    pt_highest, max_ele = point_high.get_highest_pt()
+    pt_highest, max_ele, buffer_ele = point_high.get_highest_pt()
 
     print("The coordinate of the highest point is: " + str(pt_highest.x) + ", " + str(pt_highest.y))
     print("The elevation of the highest point is: " + str(max_ele))
 
     # Task 3: Nearest Integrated Transport Network
-    itn(x, y)
-    pt_user = Point(439619, 85800)
-    a = highest_pt(pt_user, elevation)
-    h = a.get_highest_pt()[0]
-    print(h)
-    itn(h.x, h.y)
+    node_user_id = itn(pt_user.x, pt_user.y)
+    print(node_user_id)
+    # pt_user = Point(439619, 85800)
+    # a = highest_pt(pt_user, elevation)
+    # h = a.get_highest_pt()[0]
+    # print(h)
+    node_highest_id = itn(pt_highest.x, pt_highest.y)
+    print(node_highest_id)
+
     # Task 4: Shortest Path
 
     # Task 5: Map Plotting
 
-    base_fp = "E:/pycharm/ass2/Material/background/raster-50k_2724246.tif"
-    background = rasterio.open(base_fp)
-    buffered_zone = pt_user.buffer(10000)
-    out_image, out_win_transform = mask(background, [buffered_zone], crop=True, nodata=background.nodata)
+    base_fp = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
+    # background = rasterio.open(base_fp)
+    # buffered_zone = pt_user.buffer(10000)
+    # out_image, out_win_transform = mask(background, [buffered_zone], crop=True, nodata=background.nodata)
+    #
+    # back_image = out_image[0]
+    # map_plotter = Plotter(pt_user, pt_highest,back_image, out_win_transform)
+    # map_plotter.plotting()
 
-    back_image = out_image[0]
-    map_plotter = Plotter(pt_user, pt_highest,back_image, out_win_transform)
-    map_plotter.plotting()
     # map_plotter.add_background(background)
     # map_plotter.add_point(pt_user.x, pt_user.y, "Starting_point")
     # map_plotter.add_point(pt_highest.x, pt_highest.y, "Highest_point")
