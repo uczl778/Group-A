@@ -6,12 +6,9 @@ from highest_pt import *
 from plotter import *
 import geopandas as gpd
 from rasterio.mask import mask
-from rasterio.windows import Window
-import numpy as np
-from rasterio.plot import *
-import matplotlib
-import matplotlib.pyplot as plt
+from ITN import *
 
+import cartopy
 
 def main():
     # Task1: User Input
@@ -42,52 +39,33 @@ def main():
         sys.exit()
 
     # Task2: Highest Point Identification
-    ele_fp = 'F:/PycharmProjects/Material/elevation/SZ.asc'
+    ele_fp = 'E:/pycharm/ass2/Material/elevation/SZ.asc'
     # ele_fp = sys.argv[3]
     elevation = rasterio.open(ele_fp)
     point_high = highest_pt(pt_user, elevation)
-    pt_highest, max_ele, buffer_ele = point_high.get_highest_pt()
+    pt_highest, max_ele = point_high.get_highest_pt()
 
     print("The coordinate of the highest point is: " + str(pt_highest.x) + ", " + str(pt_highest.y))
     print("The elevation of the highest point is: " + str(max_ele))
 
     # Task 3: Nearest Integrated Transport Network
-
+    itn(x, y)
+    pt_user = Point(439619, 85800)
+    a = highest_pt(pt_user, elevation)
+    h = a.get_highest_pt()[0]
+    print(h)
+    itn(h.x, h.y)
     # Task 4: Shortest Path
 
     # Task 5: Map Plotting
 
-    # Plot the background
-    base_fp = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
+    base_fp = "E:/pycharm/ass2/Material/background/raster-50k_2724246.tif"
     background = rasterio.open(base_fp)
-    # background_transform = background.transform
-    # row_ptu, col_ptu = background.index(x, y)
-    # rows = row_ptu - 2000
-    # cols = col_ptu - 2000
-    # win = Window(cols, rows, 4000, 4000)
-    # win_transform = background.window_transform(win)
-    # w = background.read(1, window=win)
-    # r_c_list = range(0, w.shape[1])
-    # xs, ys = rasterio.transform.xy(win_transform, r_c_list, r_c_list)
-    # show(w, transform=background_transform)
+    buffered_zone = pt_user.buffer(10000)
+    out_image, out_win_transform = mask(background, [buffered_zone], crop=True, nodata=background.nodata)
 
-
-    # win = background.read(1, window=Window(row_ptu-10000, col_ptu-10000, ))
-    # buffered_zone = pt_user.buffer(10000)
-    # out_image, out_win_transform = mask(background, [buffered_zone], crop=True, nodata=background.nodata)
-    # out_meta = background.meta
-    #
-    # out_meta.update({"driver": "GTiff",
-    #                  "height": out_image.shape[1],
-    #                  "width": out_image.shape[2],
-    #                  "transform": out_win_transform})
-    # with rasterio.open("F:/PycharmProjects/Material/back_masked.tif", "w", **out_meta) as dest_back:
-    #     dest_back.write(out_image)
-
-    # back_image = rasterio.open("F:/PycharmProjects/Material/back_masked.tif")
-
-    # Make a plotter
-    map_plotter = Plotter(pt_user, pt_highest, background)
+    back_image = out_image[0]
+    map_plotter = Plotter(pt_user, pt_highest,back_image, out_win_transform)
     map_plotter.plotting()
     # map_plotter.add_background(background)
     # map_plotter.add_point(pt_user.x, pt_user.y, "Starting_point")
