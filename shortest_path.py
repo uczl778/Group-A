@@ -57,58 +57,58 @@ class shortest_path():
         path = nx.dijkstra_path(g, source=self.start_point, target=self.end_point, weight="weight")
         return path
 
-    #  use the color_path function that we created earlier to color the graph network and then plot it
-    def color_path(self, g, path, color="blue"):
-        res = g.copy()
-        first = path[0]
-        for node in path[1:]:
-            res.edges[first, node]["color"] = color
-            first = node
-        return res
+    # #  use the color_path function that we created earlier to color the graph network and then plot it
+    # def color_path(self, g, path, color="blue"):
+    #     res = g.copy()
+    #     first = path[0]
+    #     for node in path[1:]:
+    #         res.edges[first, node]["color"] = color
+    #         first = node
+    #     return res
 
-    def obtain_colors(self, graph, default_node="blue", default_edge="black"):
-        node_colors = []
-        for node in graph.nodes:
-            node_colors.append(graph.nodes[node].get('color', default_node))
-        edge_colors = []
-        for u, v in graph.edges:
-            edge_colors.append(graph.edges[u, v].get('color', default_edge))
-        return node_colors, edge_colors
-
-    def visual_path(self, g, path, background):
-        g_1 = self.color_path(g, path, "red")
-        node_colors, edge_colors = self.obtain_colors(g_1)
-
-        nx.draw(g_1, node_size=1, edge_color=edge_colors, node_color=node_colors)
-
-        # append the feature id and the geometry to two lists links and geom which are used to build the path_gpd GeoDataFrame.
-        links = self.iow_itn['roadlinks']
-        links_g = []
-        geom = []
-        first_node = path[0]
-        for node in path[1:]:
-            link_fid = g.edges[first_node, node]['fid']
-            links_g.append(link_fid)
-            geom.append(LineString(links[link_fid]['coords']))
-            first_node = node
-
-        shortest_path_gpd = gpd.GeoDataFrame({"fid": links_g, "geometry": geom})
-        shortest_path_gpd.plot()
-
-        #  view the route, apply the colormap to the array
-        back_array = background.read(1)
-        palette = np.array([value for key, value in background.colormap(1).items()])
-        background_image = palette[back_array]
-        bounds = background.bounds
-        extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
-        display_extent = [bounds.left + 200, bounds.right - 200, bounds.bottom + 600, bounds.top - 600]
-
-        fig = plt.figure(figsize=(3, 3), dpi=300)
-        ax = fig.add_subplot(1, 1, 1, projection=ccrs.OSGB())
-
-        ax.imshow(background_image, origin="upper", extent=extent, zorder=0)
-        shortest_path_gpd.plot(ax=ax, edgecolor="blue", linewidth=0.5, zorder=2)
-        ax.set_extent(display_extent, crs=ccrs.OSGB())
+    # def obtain_colors(self, graph, default_node="blue", default_edge="black"):
+    #     node_colors = []
+    #     for node in graph.nodes:
+    #         node_colors.append(graph.nodes[node].get('color', default_node))
+    #     edge_colors = []
+    #     for u, v in graph.edges:
+    #         edge_colors.append(graph.edges[u, v].get('color', default_edge))
+    #     return node_colors, edge_colors
+    #
+    # def visual_path(self, g, path, background):
+    #     g_1 = self.color_path(g, path, "red")
+    #     node_colors, edge_colors = self.obtain_colors(g_1)
+    #
+    #     nx.draw(g_1, node_size=1, edge_color=edge_colors, node_color=node_colors)
+    #
+    #     # append the feature id and the geometry to two lists links and geom which are used to build the path_gpd GeoDataFrame.
+    #     links = self.iow_itn['roadlinks']
+    #     links_g = []
+    #     geom = []
+    #     first_node = path[0]
+    #     for node in path[1:]:
+    #         link_fid = g.edges[first_node, node]['fid']
+    #         links_g.append(link_fid)
+    #         geom.append(LineString(links[link_fid]['coords']))
+    #         first_node = node
+    #
+    #     shortest_path_gpd = gpd.GeoDataFrame({"fid": links_g, "geometry": geom})
+    #     shortest_path_gpd.plot()
+    #
+    #     #  view the route, apply the colormap to the array
+    #     back_array = background.read(1)
+    #     palette = np.array([value for key, value in background.colormap(1).items()])
+    #     background_image = palette[back_array]
+    #     bounds = background.bounds
+    #     extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
+    #     display_extent = [bounds.left + 200, bounds.right - 200, bounds.bottom + 600, bounds.top - 600]
+    #
+    #     fig = plt.figure(figsize=(3, 3), dpi=300)
+    #     ax = fig.add_subplot(1, 1, 1, projection=ccrs.OSGB())
+    #
+    #     ax.imshow(background_image, origin="upper", extent=extent, zorder=0)
+    #     shortest_path_gpd.plot(ax=ax, edgecolor="blue", linewidth=0.5, zorder=2)
+    #     ax.set_extent(display_extent, crs=ccrs.OSGB())
 
 
 # test
