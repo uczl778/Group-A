@@ -83,7 +83,7 @@ def main():
     # Create an object of the shortest path
     path_shortest = shortest_path(start, end, iow_itn, dataset)
     g_map = path_shortest.g_map()
-    path = path_shortest.shorest_path(g_map)
+    path = path_shortest.shortest_path(g_map)
     # path_shortest.visual_path(g_map, path, background)
 
     # Task 5: Map Plotting
