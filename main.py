@@ -89,6 +89,7 @@ def main():
     # Task 5: Map Plotting
 
     plotter = Plotter(pt_user, pt_highest, background, elevation, g_map, path, iow_itn)
+    plotter.visual_path()
 
     # # Make a figure
     # fig = plt.figure(figsize=(3, 3), dpi=300)
