@@ -158,7 +158,7 @@ class Plotter:
                     xycoords=ax.transAxes)
 
         # Add a legend
-        plt.legend(loc='upper right', fontsize=3)
+        plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=2, fontsize=3)
 
         # Add a scale bar
         fontprops = fm.FontProperties(size=5)
