@@ -7,7 +7,7 @@ idx = index.Index()
 
 def itn(x, y):
     global nearest_node
-    solent_itn_json = "E:/pycharm/ass2/Material/itn/solent_itn.json"
+    solent_itn_json = "F:/PycharmProjects/Material/itn/solent_itn.json"
     with open(solent_itn_json, "r") as load_f:
         solent_itn = json.load(load_f)
 
@@ -15,7 +15,6 @@ def itn(x, y):
 
     index = 0
     # create a list for node id
-    node_append_coords = []
     node_list = {}
 
     for road_id in road_nodes:
@@ -25,7 +24,6 @@ def itn(x, y):
 
         node_list[index] = road_id
         index = index + 1
-
 
     # find out the nearest node from user
     for i in idx.nearest((x, y), 1):

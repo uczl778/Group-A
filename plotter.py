@@ -1,19 +1,12 @@
-from collections import OrderedDict
-
 import matplotlib.font_manager as fm
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 from matplotlib import colors
 import matplotlib
 import matplotlib.pyplot as plt
-import rasterio
-from rasterio import plot
-import numpy as np
 import cartopy.crs as ccrs
 from shapely.geometry import *
 from rasterio.mask import mask
-from rasterio.windows import Window
 from rasterio.plot import *
-import networkx as nx
 import geopandas as gpd
 
 matplotlib.use('TkAgg')
@@ -51,29 +44,6 @@ class Plotter:
     def get_iow_itn(self):
         return self.__iow_itn
 
-    # #  use the color_path function that we created earlier to color the graph network and then plot it
-    # def color_path(self, color="blue"):
-    #     g = self.get_graph()
-    #     path = self.get_path()
-    #
-    #     res = g.copy()
-    #     first = path[0]
-    #     for node in path[1:]:
-    #         res.edges[first, node]["color"] = color
-    #         first = node
-    #     return res
-    #
-    # def obtain_colors(self, default_node="blue", default_edge="black"):
-    #     graph = self.get_graph()
-    #
-    #     node_colors = []
-    #     for node in graph.nodes:
-    #         node_colors.append(graph.nodes[node].get('color', default_node))
-    #     edge_colors = []
-    #     for u, v in graph.edges:
-    #         edge_colors.append(graph.edges[u, v].get('color', default_edge))
-    #     return node_colors, edge_colors
-
     def visual_path(self):
         g = self.get_graph()
         path = self.get_path()
@@ -83,12 +53,8 @@ class Plotter:
         pt_highest = self.get_pt_highest()
         elevation = self.get_elevation()
 
-        # g_1 = self.color_path("red")
-        # node_colors, edge_colors = self.obtain_colors(g_1)
-        #
-        # nx.draw(g_1, node_size=1, edge_color=edge_colors, node_color=node_colors)
-
-        # append the feature id and the geometry to two lists links and geom which are used to build the path_gpd GeoDataFrame.
+        # Append the feature id and the geometry to two lists links and geom which are used to build the path_gpd
+        # GeoDataFrame.
         links = iow_itn['roadlinks']
         links_g = []
         geom = []
@@ -102,24 +68,16 @@ class Plotter:
         shortest_path_gpd = gpd.GeoDataFrame({"fid": links_g, "geometry": geom})
         # shortest_path_gpd.plot()
 
-
         # Make a figure
         fig = plt.figure(figsize=(3, 3), dpi=300)
         ax = fig.add_subplot(1, 1, 1, projection=ccrs.OSGB())
 
         # Clip and plot the background
-        r_u, c_u = background.index(pt_user.x, pt_user.y)
-        #print(background.bounds)
-        #win = Window(r_u - 2000, c_u - 2000, 4000, 4000)
         win_back = background.read(1)
-        #win_transform = background.window_transform(win)
 
         palette = np.array([value for key, value in background.colormap(1).items()])
         background_image = palette[win_back]
-        left_bottom = (0, 0)
-        right_top = (win_back.shape[1], win_back.shape[0])
-        # left, top = win_transform * left_bottom
-        # right, bottom = win_transform * right_top
+
         left, bottom, right, top = background.bounds.left, background.bounds.bottom, background.bounds.right, background.bounds.top
         extent = [left, right, bottom, top]
         display_extent = [pt_user.x + 7500, pt_user.x - 7500, pt_user.y + 7500, pt_user.y - 7500]
@@ -160,7 +118,7 @@ class Plotter:
                     xycoords=ax.transAxes)
 
         # Add a legend
-        plt.legend(loc='right upper', fontsize=3)
+        plt.legend(loc='upper right', fontsize=3)
 
         # Add a scale bar
         fontprops = fm.FontProperties(size=5)
