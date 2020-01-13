@@ -24,8 +24,8 @@ matplotlib.use('TkAgg')
 
 def main():
     # Task1: User Input
-    tuple_user = (450000, 83000)
-    # tuple_user = (sys.argv[1], sys.argv[2])
+    # tuple_user = (450000, 83000)
+    tuple_user = (sys.argv[1], sys.argv[2])
     # Error handling
     try:
         x = float(tuple_user[0])
