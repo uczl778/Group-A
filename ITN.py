@@ -6,6 +6,7 @@ idx = index.Index()
 
 
 def itn(x, y):
+    global nearest_node
     solent_itn_json = "F:/PycharmProjects/Material/itn/solent_itn.json"
     with open(solent_itn_json, "r") as load_f:
         solent_itn = json.load(load_f)
@@ -36,4 +37,5 @@ def itn(x, y):
     for i in idx.nearest((x, y), 1):
         nearest_node = node_list[i]
         # nearest_id = node_list[i][index]
-        return nearest_node
+
+    return nearest_node[0]
