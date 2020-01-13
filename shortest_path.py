@@ -53,7 +53,7 @@ class shortest_path():
                        weight=links[link]['length'] / 5000 * 60 + elevation * 1 / 10)
         return g
 
-    def shorest_path(self, g):
+    def shortest_path(self, g):
         path = nx.dijkstra_path(g, source=self.start_point, target=self.end_point, weight="weight")
         return path
 
