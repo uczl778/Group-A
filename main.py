@@ -52,7 +52,7 @@ def main():
 
     # Task2: Highest Point Identification
     # Read the elevation
-    ele_fp = 'F:/PycharmProjects/Material/elevation/SZ.asc'
+    ele_fp = 'E:/pycharm/ass2/Material/elevation/SZ.asc'
     elevation = rasterio.open(ele_fp)
     # Create an object of the highest point
     point_highest = highest_pt(pt_user, elevation)
@@ -63,19 +63,19 @@ def main():
 
     # Task 3: Nearest Integrated Transport Network
     node_user_id = itn(pt_user.x, pt_user.y)
-    # print(node_user_id)
+    print(itn(pt_user.x, pt_user.y))
     node_highest_id = itn(pt_highest.x, pt_highest.y)
-    # print(node_highest_id)
+    print(itn(pt_highest.x, pt_highest.y))
 
     # Task 4: Shortest Path
     # Read the network
-    iow_itn_json = "F:/PycharmProjects/Material/itn/solent_itn.json"
+    iow_itn_json = "E:/pycharm/ass2/Material/itn/solent_itn.json"
     with open(iow_itn_json, "r") as f:
         iow_itn = json.load(f)
     # Read the elevation info
     dataset = elevation
     # View the route, load the background map
-    mersea_background = "F:/PycharmProjects/Material/background/raster-50k_2724246.tif"
+    mersea_background = "E:/pycharm/ass2/Material/background/raster-50k_2724246.tif"
     background = rasterio.open(str(mersea_background))
     # The start point and end point
     start = node_user_id

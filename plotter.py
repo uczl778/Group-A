@@ -149,7 +149,7 @@ class Plotter:
         # Add a color-bar for the elevation buffer
         cbar = fig.colorbar(ele_img, cmap='terrain', ax=ax, shrink=0.8,
                             norm=colors.Normalize(vmin=np.nanmin(elevation_image), vmax=np.nanmax(elevation_image)))
-
+        cbar.ax.tick_params(labelsize=3)
         # Add a North Arrow
         arrow_x, arrow_y, arrow_length = 0.05, 0.95, 0.1
         ax.annotate('N', xy=(arrow_x, arrow_y), xytext=(arrow_x, arrow_y - arrow_length),
@@ -158,7 +158,7 @@ class Plotter:
                     xycoords=ax.transAxes)
 
         # Add a legend
-        plt.legend(loc='upper right', fontsize=4)
+        plt.legend(loc='upper right', fontsize=3)
 
         # Add a scale bar
         fontprops = fm.FontProperties(size=5)

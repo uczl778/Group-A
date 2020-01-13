@@ -20,9 +20,9 @@ class shortest_path():
         self.end_point = end_point
         self.iow_itn = iow_itn
         self.dataset = dataset
-
+        self.matrix = self.dataset.read(1)
     def calculate_elevation(self, coor1, coor2):
-        matrix = self.dataset.read(1)
+
         x1 = coor1[0]
         y1 = coor1[1]
 
@@ -30,9 +30,9 @@ class shortest_path():
         y2 = coor2[1]
 
         row, col = self.dataset.index(x1, y1)
-        h1 = matrix[row, col]
+        h1 = self.matrix[row, col]
         row, col = self.dataset.index(x2, y2)
-        h2 = matrix[row, col]
+        h2 = self.matrix[row, col]
         elevation = abs(h1 - h2)
         return elevation
 
