@@ -109,18 +109,20 @@ class Plotter:
 
         # Clip and plot the background
         r_u, c_u = background.index(pt_user.x, pt_user.y)
-        win = Window(r_u - 2000, c_u - 2000, 4000, 4000)
-        win_back = background.read(1, window=win)
-        win_transform = background.window_transform(win)
+        #print(background.bounds)
+        #win = Window(r_u - 2000, c_u - 2000, 4000, 4000)
+        win_back = background.read(1)
+        #win_transform = background.window_transform(win)
 
         palette = np.array([value for key, value in background.colormap(1).items()])
         background_image = palette[win_back]
         left_bottom = (0, 0)
         right_top = (win_back.shape[1], win_back.shape[0])
-        left, top = win_transform * left_bottom
-        right, bottom = win_transform * right_top
+        # left, top = win_transform * left_bottom
+        # right, bottom = win_transform * right_top
+        left, bottom, right, top = background.bounds.left, background.bounds.bottom, background.bounds.right, background.bounds.top
         extent = [left, right, bottom, top]
-        display_extent = [left + 200, right - 200, bottom + 600, top - 600]
+        display_extent = [pt_user.x + 7500, pt_user.x - 7500, pt_user.y + 7500, pt_user.y - 7500]
 
         ax.imshow(background_image, origin="upper", extent=extent, zorder=0)
 
@@ -158,7 +160,7 @@ class Plotter:
                     xycoords=ax.transAxes)
 
         # Add a legend
-        plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=2, fontsize=3)
+        plt.legend(loc='right upper', fontsize=3)
 
         # Add a scale bar
         fontprops = fm.FontProperties(size=5)
